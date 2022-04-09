@@ -17,7 +17,7 @@ const routes: Routes = [
         component: ListadoComponent
       },
       {
-        path: 'agregar',
+        path: 'agregar',//Button Editar
         component: AgregarComponent
       },
       {
@@ -29,7 +29,7 @@ const routes: Routes = [
         component: BuscarComponent
       },
       {
-        path: ':id',
+        path: ':id',//Button leermas
         component: HeroeComponent
       },
       {

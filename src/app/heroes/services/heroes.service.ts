@@ -8,9 +8,17 @@ import { Observable } from 'rxjs';
 })
 export class HeroesService {
 
+  private apiUrl: string = "http://localhost:3000";
+
   constructor( private http: HttpClient ) { }
 
   getHeroes(): Observable<Heroe[]>{
     return this.http.get<Heroe[]>('http://localhost:3000/heroes');
+  }
+
+  getHeroePorId( id: string): Observable<Heroe>{
+    const url = `${ this.apiUrl }/heroes/${ id }`;
+    console.log(url);
+    return this.http.get<Heroe>( url );
   }
 }
