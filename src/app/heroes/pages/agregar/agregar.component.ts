@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { Heroe, Publisher } from '../../interfaces/heroes.interface';
 import { HeroesService } from '../../services/heroes.service';
-import { switchMap } from 'rxjs/operators';
+import { ConfirmarComponent } from '../../components/confirmar/confirmar.component';
 
 @Component({
   selector: 'app-agregar',
@@ -39,6 +43,8 @@ export class AgregarComponent implements OnInit {
 
   constructor(private heroesService: HeroesService,
               private activatedRoute: ActivatedRoute,
+              private snackBar: MatSnackBar,
+              public dialog: MatDialog,
               private router: Router) { }
 
   ngOnInit(): void {
@@ -61,10 +67,11 @@ export class AgregarComponent implements OnInit {
 
     if(this.heroe.id){
       this.heroesService.actualizarHeroe( this.heroe )
-        .subscribe( heroe => console.log('actualizando'));
+        .subscribe( heroe => this.mostrarSnackBar('Registro Actualizado') );
     }else{
       this.heroesService.agregarHeroe( this.heroe )
         .subscribe( heroe => {
+          this.mostrarSnackBar('Registro Creado')
           this.router.navigate( ['/heroes/editar', heroe.id] );
         })
     }
@@ -72,9 +79,30 @@ export class AgregarComponent implements OnInit {
   }
 
   borrarHeroe(){
-    this.heroesService.borrarHeroe( this.heroe.id! )
-      .subscribe( resp => {
-        this.router.navigate(['/heroes']);
-      });
+
+    const dialog = this.dialog.open( ConfirmarComponent, {
+      width: '250px',
+      data: this.heroe
+      // data: { ...this.heroe } //para que no se modifique, ya que esto se pasa por referencia (es una opcion)
+    } );
+
+    //Implementar switchMap
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if( result ){
+          this.heroesService.borrarHeroe( this.heroe.id! )
+          .subscribe( resp => {
+            this.router.navigate(['/heroes']);
+          });
+        }
+      }
+    )
+    
+  }
+
+  mostrarSnackBar(mensaje: string): void{
+    this.snackBar.open( mensaje, 'Ok!', {
+      duration: 2500
+    } );
   }
 }
