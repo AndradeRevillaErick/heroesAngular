@@ -21,6 +21,17 @@ import { ConfirmarComponent } from '../../components/confirmar/confirmar.compone
 })
 export class AgregarComponent implements OnInit {
 
+  publishers = [
+    {
+      id: 'DC Comics',
+      desc: 'DC - Comics'
+    },
+    {
+      id: 'Marvel Comics',
+      desc: 'Marvel - Comics'
+    }
+  ]
+
   heroe: Heroe = {
     superhero : '',
     alter_ego: '',
@@ -29,17 +40,6 @@ export class AgregarComponent implements OnInit {
     publisher: Publisher.DCComics,
     alt_img: '', 
   }
-
-  publishers = [
-    {
-      id: 'DC= Comics',
-      desc: 'DC - Comics'
-    },
-    {
-      id: 'Marvel Comics',
-      desc: 'Marvel - Comics'
-    }
-  ]
 
   constructor(private heroesService: HeroesService,
               private activatedRoute: ActivatedRoute,
