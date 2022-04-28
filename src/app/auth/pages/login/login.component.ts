@@ -11,20 +11,20 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent  {
 
   constructor( private router: Router,
-               private AuthService: AuthService
+               private authService: AuthService
               ) { }
 
   login(){
     //ir al backend
-    //un usuario
+    //confirmar que el usuario existe
 
     // this.router.navigate(['./heroes']);
 
-    this.AuthService.login()
+    this.authService.login()
       .subscribe( resp => {
         console.log(resp);
 
-        if(resp.id){
+        if( resp.id ){
           this.router.navigate(['./heroes']);
         }
         
